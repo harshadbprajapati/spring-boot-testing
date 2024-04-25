@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -56,6 +57,21 @@ class EmployeeRepositoryTest {
 
         //Assert
         Assertions.assertThat(employee).isNotNull();
+    }
+
+    @Test
+    public void EmployeeRepository_DeleteById_ReturnEmployeeEmpty() throws Exception {
+        //Arrange
+        Employee employee = new Employee("Tom", "Cruise");
+        employeeRepository.save(employee);
+
+        //Act
+        employeeRepository.deleteById(employee.getId());
+        Optional<Employee> employeeOptional = employeeRepository.findById(employee.getId());
+
+
+        //Assert
+        Assertions.assertThat(employeeOptional).isEmpty();
     }
 
 }
