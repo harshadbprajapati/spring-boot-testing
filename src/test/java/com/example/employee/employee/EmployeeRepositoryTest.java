@@ -45,5 +45,18 @@ class EmployeeRepositoryTest {
         Assertions.assertThat(employees.size()).isEqualTo(2);
     }
 
+    @Test
+    public void EmployeeRepository_FindById_ReturnEmployee() throws Exception {
+        //Arrange
+        Employee employee = new Employee("Tom", "Cruise");
+        employeeRepository.save(employee);
+
+        //Act
+        Employee foundEmployee = employeeRepository.findById(employee.getId()).get();
+
+        //Assert
+        Assertions.assertThat(employee).isNotNull();
+    }
+
 }
 
