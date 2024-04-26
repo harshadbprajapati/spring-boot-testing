@@ -38,8 +38,9 @@ class EmployeeServiceTest {
 
         //Assert
         Assertions.assertThat(savedEmployee).isNotNull();
-        assertEquals(employee.getFirstName(), savedEmployee.getFirstName());
-        assertEquals(employee.getLastName(), savedEmployee.getLastName());
+//        assertEquals(employee.getFirstName(), savedEmployee.getFirstName());
+//        assertEquals(employee.getLastName(), savedEmployee.getLastName());
+        Assertions.assertThat(savedEmployee).isEqualToComparingFieldByField(employee);
     }
 
 }
