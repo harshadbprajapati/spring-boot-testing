@@ -1,6 +1,7 @@
 package com.example.employee.employee;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -19,6 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,13 +50,20 @@ class EmployeeControllerTest {
 
     @Test
     public void EmployeeController_AddEmployee_ReturnsCreated() throws Exception{
+        //Arrange
         Employee employee = new Employee("Tom", "Cruise");
-        Mockito.when(employeeService.save(ArgumentMatchers.any()))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(employeeService.save(Mockito.any(Employee.class))).thenReturn(employee);
+        //Act
         ResultActions response = mockMvc.perform(post("/api/v1/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)));
-        response.andExpect(MockMvcResultMatchers.status().isOk());
+        //Assert
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",
+                        CoreMatchers.is(employee.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName",
+                        CoreMatchers.is(employee.getLastName())));
     }
 
 }
