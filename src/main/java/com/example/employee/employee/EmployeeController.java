@@ -12,6 +12,7 @@ public class EmployeeController {
 
     @Autowired
     public EmployeeController(EmployeeService employeeService) {
+//        System.out.println("EmployeeController called");
         this.employeeService = employeeService;
     }
 
@@ -21,12 +22,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public Employee addEmployee(Employee employee) {
+    public Employee addEmployee(@RequestBody Employee employee) {
         return employeeService.save(employee);
     }
 
     @PutMapping("/employees")
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(@RequestBody Employee employee) {
         return employeeService.save(employee);
     }
 
