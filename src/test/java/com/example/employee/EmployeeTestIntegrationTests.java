@@ -70,6 +70,23 @@ public class EmployeeTestIntegrationTests {
                 () -> assertEquals("Tom", employee.getFirstName())
         );
     }
+
+    @Test
+    @Sql(statements = "INSERT INTO Employee (id, FIRST_NAME, LAST_NAME) VALUES (1, 'Tom', 'Cruise')",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "DELETE FROM Employee WHERE FIRST_NAME = 'Tomkumar'",
+            executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void Application_UpdateEmployee_ReturnEmployee() {
+        Employee employee = new Employee("Tomkumar", "Cruise");
+        employee.setId(1);
+        restTemplate.put(baseUrl, employee);
+        Employee updatedEmployee = employeeRepository.findById(1).get();
+        assertAll(
+                () -> assertNotNull(updatedEmployee),
+                () -> assertEquals(1, updatedEmployee.getId()),
+                () -> assertEquals("Tomkumar", updatedEmployee.getFirstName())
+        );
+    }
 }
 
 
