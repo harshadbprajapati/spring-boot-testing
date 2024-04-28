@@ -87,6 +87,16 @@ public class EmployeeTestIntegrationTests {
                 () -> assertEquals("Tomkumar", updatedEmployee.getFirstName())
         );
     }
+
+    @Test
+    @Sql(statements = "INSERT INTO Employee (id, FIRST_NAME, LAST_NAME) VALUES (1, 'Tom', 'Cruise')",
+            executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void Application_DeleteEmployee_ReturnMessage() {
+        int employeeCount = employeeRepository.findAll().size();
+        assertEquals(1, employeeCount);
+        restTemplate.delete(baseUrl+"/{id}", 1);
+        assertEquals(0, employeeRepository.findAll().size());
+    }
 }
 
 
